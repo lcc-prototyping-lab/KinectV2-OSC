@@ -70,7 +70,9 @@ namespace KinectV2OSC.Model.Network
         {
             foreach (var joint in body.Joints)
             {
-                message = messageBuilder.BuildJointMessage(body, joint);
+                var type = joint.Key;
+                var orient = body.JointOrientations[type];
+                message = messageBuilder.BuildJointMessage(body, joint,orient);
                 this.Broadcast(message);
             }
 
