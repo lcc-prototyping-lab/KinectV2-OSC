@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Kinect;
+using Microsoft.Kinect.Face;
 using Rug.Osc;
 
 namespace KinectV2OSC.Model.Network
@@ -23,6 +24,12 @@ namespace KinectV2OSC.Model.Network
             var address = String.Format("/bodies/{0}/hands/{1}", body.TrackingId, key);
             //System.Diagnostics.Debug.WriteLine(address);
             return new OscMessage(address, state.ToString(), confidence.ToString());
+        }
+
+        public OscMessage BuildAUMessage(ulong tackingid,string key,float au)
+        {
+            var address = String.Format("/faces/{0}/au/{1}", tackingid, key);
+            return new OscMessage(address,au);
         }
     }
 }

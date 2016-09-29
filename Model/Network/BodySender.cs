@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
 using Microsoft.Kinect;
+using Microsoft.Kinect.Face;
 using Rug.Osc;
 
 namespace KinectV2OSC.Model.Network
@@ -61,6 +62,11 @@ namespace KinectV2OSC.Model.Network
             }
         }
 
+        public void Send(HighDefinitionFaceFrame frame, FaceAlignment alignment)
+        {
+           this.Send(frame.TrackingId,alignment);
+        }
+
         public string GetStatusText()
         {
             return this.status;
@@ -81,6 +87,15 @@ namespace KinectV2OSC.Model.Network
 
             message = messageBuilder.BuildHandMessage(body, "Right", body.HandRightState, body.HandRightConfidence);
             this.Broadcast(message);
+        }
+
+        private void Send(ulong trackingid, FaceAlignment alignment)
+        {
+            foreach (var au in alignment.AnimationUnits)
+            {
+                message = messageBuilder.BuildAUMessage(trackingid, au.Key.ToString(), au.Value);
+                this.Broadcast(message);
+            }
         }
 
         private void Broadcast(OscMessage message)
